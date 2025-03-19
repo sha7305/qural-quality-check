@@ -3,24 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Qural Quality Test</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Sha Groups Quiz</title>
+    <style>
+        body {
+            background: url('1.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: white;
+        }
+        .quiz-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            width: 80%;
+            margin: auto;
+            border-radius: 10px;
+        }
+        .question {
+            font-size: 20px;
+            margin: 20px 0;
+        }
+        .option {
+            background-color: orange;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+            border-radius: 5px;
+        }
+        .option:hover { background-color: yellow; }
+        .correct { background-color: green !important; }
+        .wrong { background-color: red !important; }
+        #result {
+            font-size: 24px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-
-    <div class="container">
-        <img src="1.png" alt="Loan Image" class="logo">
-        <h1>Qural Quality Test</h1>
-        <p>Answer the questions to check your mental, physical, and general knowledge strength.</p>
-
-        <div id="quiz-container"></div>
-
-        <button onclick="checkResults()" id="submit-btn">Submit</button>
-
-        <div id="result"></div>
+    <div class="quiz-container">
+        <h1>Sha Groups Ultimate Quiz</h1>
+        <div id="quiz"></div>
+        <button onclick="submitQuiz()">Submit</button>
+        <p id="result"></p>
     </div>
+    
+    <script>
+        const questions = [
+            { q: "Who is the founder of Sha Groups?", options: ["Sandeep", "Rahul", "Amit"], answer: "Sandeep" },
+            { q: "Which element has the highest melting point?", options: ["Tungsten", "Iron", "Platinum"], answer: "Tungsten" },
+            { q: "What is the rarest blood type in the world?", options: ["AB-negative", "O-negative", "B-positive"], answer: "AB-negative" },
+            { q: "Which country has the most time zones?", options: ["France", "USA", "Russia"], answer: "France" },
+            { q: "What is the largest desert in the world?", options: ["Sahara", "Antarctica", "Gobi"], answer: "Antarctica" },
+            { q: "Which is the deepest point on Earth?", options: ["Mariana Trench", "Challenger Deep", "Tonga Trench"], answer: "Challenger Deep" },
+            { q: "Who developed the theory of relativity?", options: ["Einstein", "Newton", "Galileo"], answer: "Einstein" },
+            { q: "What is the smallest country in the world?", options: ["Monaco", "Vatican City", "San Marino"], answer: "Vatican City" },
+            { q: "What is the hardest naturally occurring substance?", options: ["Diamond", "Graphene", "Quartz"], answer: "Diamond" },
+            { q: "Which is the longest river in the world?", options: ["Amazon", "Nile", "Yangtze"], answer: "Nile" },
+            { q: "What is the hottest planet in the solar system?", options: ["Mercury", "Venus", "Mars"], answer: "Venus" },
+            { q: "Which gas is most abundant in Earth's atmosphere?", options: ["Oxygen", "Nitrogen", "Carbon Dioxide"], answer: "Nitrogen" },
+            { q: "Who painted the Mona Lisa?", options: ["Van Gogh", "Da Vinci", "Picasso"], answer: "Da Vinci" },
+            { q: "Which is the strongest muscle in the human body?", options: ["Tongue", "Jaw Muscle", "Heart"], answer: "Jaw Muscle" },
+            { q: "Who was the first person to walk on the moon?", options: ["Neil Armstrong", "Buzz Aldrin", "Michael Collins"], answer: "Neil Armstrong" },
+            { q: "What is the chemical symbol for gold?", options: ["Au", "Ag", "Pb"], answer: "Au" },
+            { q: "What is the world's most spoken language?", options: ["English", "Mandarin Chinese", "Spanish"], answer: "Mandarin Chinese" },
+            { q: "What is the capital of Canada?", options: ["Toronto", "Vancouver", "Ottawa"], answer: "Ottawa" },
+            { q: "What is the largest organ in the human body?", options: ["Liver", "Skin", "Heart"], answer: "Skin" },
+            { q: "What is the currency of Japan?", options: ["Yuan", "Won", "Yen"], answer: "Yen" }
+        ];
 
-    <script src="script.js"></script>
+        function loadQuiz() {
+            let quizDiv = document.getElementById("quiz");
+            quizDiv.innerHTML = "";
+            questions.forEach((q, index) => {
+                let questionHTML = `<div class='question'>${index + 1}. ${q.q}</div>`;
+                q.options.forEach(option => {
+                    questionHTML += `<button class='option' onclick='selectAnswer(this, ${index})'>${option}</button>`;
+                });
+                quizDiv.innerHTML += questionHTML;
+            });
+        }
 
+        function selectAnswer(btn, index) {
+            let options = btn.parentNode.getElementsByClassName("option");
+            for (let option of options) {
+                option.style.backgroundColor = "orange";
+            }
+            btn.style.backgroundColor = "yellow";
+            questions[index].selected = btn.innerText;
+        }
+
+        function submitQuiz() {
+            let correctCount = 0;
+            let allOptions = document.getElementsByClassName("option");
+            for (let i = 0; i < questions.length; i++) {
+                let selected = questions[i].selected || "";
+                let correct = questions[i].answer;
+                for (let option of allOptions) {
+                    if (option.innerText === correct) {
+                        option.classList.add("correct");
+                    }
+                    if (option.innerText === selected && selected !== correct) {
+                        option.classList.add("wrong");
+                    }
+                }
+                if (selected === correct) correctCount++;
+            }
+            let resultText = correctCount > 18 ? "Excellent!" : correctCount > 12 ? "Great Job!" : correctCount > 8 ? "Good Try!" : "Keep Practicing!";
+            document.getElementById("result").innerText = `You scored ${correctCount}/20. ${resultText}`;
+        }
+
+        window.onload = loadQuiz;
+    </script>
 </body>
 </html>
